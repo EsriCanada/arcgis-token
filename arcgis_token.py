@@ -1,9 +1,10 @@
-from PyQt4.QtCore import *
-from PyQt4.QtGui import *
 import sys
 import json
 import urllib
 import time
+
+from PyQt4.QtCore import *
+from PyQt4.QtGui import *
 
 
 class ArcGIS(QDialog):
@@ -71,7 +72,6 @@ class ArcGIS(QDialog):
         self.expiration_lbl.setFont(self.expiration_font)
         layout.setAlignment(self.expiration_lbl, Qt.AlignCenter)
 
-
         self.setLayout(layout)
         self.setWindowTitle(self.main_title)
         self.setFocus()
@@ -101,7 +101,7 @@ class ArcGIS(QDialog):
             self.message_lbl.setPalette(self.palette)
             self.message_lbl.setText("Token Granted")
             self.sub_message_lbl.setText("Your token expires:")
-            self.expiration_lbl.setText(time.ctime(int(submitJson["expires"])/1000))
+            self.expiration_lbl.setText(time.ctime(int(submitJson["expires"]) / 1000))
             self.token_output.clear()
             self.token_output.insertPlainText(str(submitJson['token']))
 
