@@ -44,3 +44,7 @@ Temporary Items
 
 # Custom for PyCharm
 /.idea
+
+# Build
+/build
+/dist
