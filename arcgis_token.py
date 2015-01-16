@@ -2,6 +2,7 @@ import sys
 import json
 import urllib
 import time
+import ctypes
 
 from PyQt4.QtCore import *
 from PyQt4.QtGui import *
@@ -107,7 +108,14 @@ class ArcGIS(QDialog):
 
 
 app = QApplication(sys.argv)
+
+myappid = u'esricanada.tokengenerator.arcgis.1'
+ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(myappid)
+
 dialog = ArcGIS()
 dialog.setFixedSize(200, 325)
+dialog.setWindowIcon(QIcon('icon.ico'))
+app.setWindowIcon(QIcon('icon.ico'))
+
 dialog.show()
 app.exec_()
