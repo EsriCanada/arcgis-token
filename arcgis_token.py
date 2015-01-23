@@ -16,7 +16,7 @@ class ArcGIS(QtGui.QDialog):
         self.clipboard = QtGui.QApplication.clipboard()
 
         # Variables
-        self.main_title = "ArcGIS Online Token Generator"
+        self.main_title = "Token Generator"
         self.url = "https://www.arcgis.com/sharing/rest"
         self.submitUrl = self.url + "/generateToken"
         self.expirations = ['60', '120', '180', 'max']
@@ -111,13 +111,16 @@ if __name__ == "__main__":
 
     app = QtGui.QApplication(sys.argv)
 
+    # http://stackoverflow.com/questions/1551605/how-to-set-applications-taskbar-icon-in-windows-7/1552105#1552105
     appid = u'esricanada.tokengenerator.arcgis.0.1'
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(appid)
 
     dialog = ArcGIS()
     dialog.setFixedSize(200, 325)
-    dialog.setWindowIcon(QtGui.QIcon('icon.ico'))
-    app.setWindowIcon(QtGui.QIcon('icon.ico'))
+    dialog.setWindowIcon(QtGui.QIcon('images/icon-windowed.ico'))
+    app.setWindowIcon(QtGui.QIcon('images/icon-windowed.ico'))
+
+    dialog.setWindowFlags(QtCore.Qt.WindowSystemMenuHint | QtCore.Qt.WindowTitleHint)
 
     dialog.show()
     sys.exit(app.exec_())
