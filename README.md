@@ -52,7 +52,7 @@ See the [pyinstaller manual](http://pythonhosted.org/PyInstaller/#using-pyinstal
 
 ```Shell
 pip install pyinstaller
-pyinstaller --name=ArcGIS-Token --onefile --windowed --noconsole arcgis_token.py
+pyinstaller --name=ArcGIS-Token --onefile --windowed --noconsole --icon=images/icon-windowed.ico arcgis_token.py
 ```
 
 The executable should be created in the /dist folder
