@@ -1,3 +1,6 @@
+#! /usr/bin/python
+# -*- coding: utf-8 -*-
+
 import sys
 import json
 import urllib
@@ -77,34 +80,34 @@ class ArcGIS(QtGui.QDialog):
         self.setWindowTitle(self.main_title)
         self.setFocus()
 
-
     def get_token(self):
         # The maximum expiration period is 15 days or 21600 minutes
+        expire_select = self.expiration_combo.currentText()
         data = dict(username=self.username_txt.text(),
                     password=self.password_txt.text(),
-                    expiration='21600' if self.expiration_combo.currentText() == 'max' else self.expiration_combo.currentText(),
+                    expiration='21600' if expire_select == 'max' else expire_select,
                     client='referer',
                     referer='https://www.arcgis.com',
                     f='json')
 
-        submitResponse = urllib.urlopen(self.submitUrl, urllib.urlencode(data))
-        submitJson = json.loads(submitResponse.read())
+        submit_response = urllib.urlopen(self.submitUrl, urllib.urlencode(data))
+        submit_json = json.loads(submit_response.read())
 
-        if 'error' in submitJson:
+        if 'error' in submit_json:
             self.palette.setColor(QtGui.QPalette.Foreground, QtCore.Qt.red)
             self.message_lbl.setPalette(self.palette)
-            self.message_lbl.setText(str(submitJson['error']['details'][0]))
+            self.message_lbl.setText(str(submit_json['error']['details'][0]))
         else:
             if self.clipboard_chk.isChecked():
                 self.clipboard.clear()
-                self.clipboard.setText(str(submitJson['token']), mode=self.clipboard.Clipboard)
+                self.clipboard.setText(str(submit_json['token']), mode=self.clipboard.Clipboard)
             self.palette.setColor(QtGui.QPalette.Foreground, QtCore.Qt.blue)
             self.message_lbl.setPalette(self.palette)
             self.message_lbl.setText("Token Granted")
             self.sub_message_lbl.setText("Your token expires:")
-            self.expiration_lbl.setText(time.ctime(int(submitJson["expires"]) / 1000))
+            self.expiration_lbl.setText(time.ctime(int(submit_json["expires"]) / 1000))
             self.token_output.clear()
-            self.token_output.insertPlainText(str(submitJson['token']))
+            self.token_output.insertPlainText(str(submit_json['token']))
 
 
 if __name__ == "__main__":
@@ -112,8 +115,8 @@ if __name__ == "__main__":
     app = QtGui.QApplication(sys.argv)
 
     # http://stackoverflow.com/questions/1551605/how-to-set-applications-taskbar-icon-in-windows-7/1552105#1552105
-    appid = u'esricanada.tokengenerator.arcgis.0.1'
-    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(appid)
+    app_id = u'esricanada.tokengenerator.arcgis.0.1'
+    ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(app_id)
 
     dialog = ArcGIS()
     dialog.setFixedSize(200, 325)
