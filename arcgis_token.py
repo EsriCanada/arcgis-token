@@ -14,7 +14,7 @@ import PyQt4.QtGui as QtGui
 class ArcGIS(QtGui.QDialog):
     def __init__(self):
         QtGui.QDialog.__init__(self)
-        layout = QtGui.QVBoxLayout()
+        layout = QtGui.QGridLayout()
 
         self.clipboard = QtGui.QApplication.clipboard()
 
@@ -25,12 +25,13 @@ class ArcGIS(QtGui.QDialog):
         self.expirations = ['60', '120', '180', 'max']
 
         # Design widgets
-        self.title_lbl = QtGui.QLabel(self.main_title)
+        self.title_lbl = QtGui.QLabel("ArcGIS Online")
         self.username_txt = QtGui.QLineEdit()
         self.password_txt = QtGui.QLineEdit()
         self.expiration_combo = QtGui.QComboBox()
         self.clipboard_chk = QtGui.QCheckBox("Copy token to clipboard ?")
         self.get_token_btn = QtGui.QPushButton("Get Token")
+        self.clear_btn = QtGui.QPushButton("X")
         self.message_lbl = QtGui.QLabel()
         self.sub_message_lbl = QtGui.QLabel()
         self.expiration_lbl = QtGui.QLabel()
@@ -41,29 +42,28 @@ class ArcGIS(QtGui.QDialog):
         self.password_txt.setPlaceholderText("Password")
         self.password_txt.setEchoMode(QtGui.QLineEdit.Password)
         self.get_token_btn.clicked.connect(self.get_token)
+        self.clear_btn.clicked.connect(self.clear_form)
         self.expiration_combo.addItems(self.expirations)
 
         # Add widgets
-        layout.addWidget(self.title_lbl)
-        layout.addWidget(self.username_txt)
-        layout.addWidget(self.password_txt)
-        layout.addWidget(self.expiration_combo)
-        layout.addWidget(self.get_token_btn)
-        layout.addWidget(self.clipboard_chk)
-        layout.addWidget(self.message_lbl)
-        layout.addWidget(self.sub_message_lbl)
-        layout.addWidget(self.expiration_lbl)
-        layout.addWidget(self.token_output)
+        layout.addWidget(self.title_lbl, 0, 0, 1, 4)
+        layout.addWidget(self.username_txt, 1, 0, 1, 4)
+        layout.addWidget(self.password_txt, 2, 0, 1, 4)
+        layout.addWidget(self.expiration_combo, 3, 0, 1, 1)
+        layout.addWidget(self.get_token_btn, 3, 1, 1, 2)
+        layout.addWidget(self.clear_btn, 3, 3, 1, 1)
+        layout.addWidget(self.clipboard_chk, 4, 0, 1, 4)
+        layout.addWidget(self.message_lbl, 5, 0, 1, 4)
+        layout.addWidget(self.sub_message_lbl, 6, 0, 1, 4)
+        layout.addWidget(self.expiration_lbl, 7, 0, 1, 4)
+        layout.addWidget(self.token_output, 8, 0, 5, 4)
 
         # Formatting
         layout.setAlignment(self.title_lbl, QtCore.Qt.AlignCenter)
-        layout.setAlignment(self.username_txt, QtCore.Qt.AlignCenter)
-        layout.setAlignment(self.password_txt, QtCore.Qt.AlignCenter)
-        layout.setAlignment(self.expiration_combo, QtCore.Qt.AlignCenter)
-        layout.setAlignment(self.get_token_btn, QtCore.Qt.AlignCenter)
         layout.setAlignment(self.clipboard_chk, QtCore.Qt.AlignCenter)
         layout.setAlignment(self.message_lbl, QtCore.Qt.AlignCenter)
         layout.setAlignment(self.sub_message_lbl, QtCore.Qt.AlignCenter)
+        layout.setAlignment(self.token_output, QtCore.Qt.AlignCenter)
 
         self.palette = QtGui.QPalette()
 
@@ -76,11 +76,24 @@ class ArcGIS(QtGui.QDialog):
         self.expiration_lbl.setFont(self.expiration_font)
         layout.setAlignment(self.expiration_lbl, QtCore.Qt.AlignCenter)
 
+        # Hide output widgets initially
+        self.message_lbl.hide()
+        self.sub_message_lbl.hide()
+        self.expiration_lbl.hide()
+        self.token_output.hide()
+
         self.setLayout(layout)
         self.setWindowTitle(self.main_title)
         self.setFocus()
 
     def get_token(self):
+
+        # Hide previous messages
+        self.message_lbl.hide()
+        self.sub_message_lbl.hide()
+        self.expiration_lbl.hide()
+        self.token_output.hide()
+
         # The maximum expiration period is 15 days or 21600 minutes
         expire_select = self.expiration_combo.currentText()
         data = dict(username=self.username_txt.text(),
@@ -97,6 +110,10 @@ class ArcGIS(QtGui.QDialog):
             self.palette.setColor(QtGui.QPalette.Foreground, QtCore.Qt.red)
             self.message_lbl.setPalette(self.palette)
             self.message_lbl.setText(str(submit_json['error']['details'][0]))
+
+            # Show messages
+            self.message_lbl.show()
+
         else:
             if self.clipboard_chk.isChecked():
                 self.clipboard.clear()
@@ -109,6 +126,24 @@ class ArcGIS(QtGui.QDialog):
             self.token_output.clear()
             self.token_output.insertPlainText(str(submit_json['token']))
 
+            # Show messages
+            self.message_lbl.show()
+            self.sub_message_lbl.show()
+            self.expiration_lbl.show()
+            self.token_output.show()
+
+    def clear_form(self):
+
+        # Hide previous messages
+        self.message_lbl.hide()
+        self.sub_message_lbl.hide()
+        self.expiration_lbl.hide()
+        self.token_output.hide()
+
+        self.username_txt.clear()
+        self.password_txt.clear()
+        self.expiration_combo.setCurrentIndex(0)
+
 
 if __name__ == "__main__":
 
@@ -119,7 +154,7 @@ if __name__ == "__main__":
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(app_id)
 
     dialog = ArcGIS()
-    dialog.setFixedSize(200, 325)
+    dialog.setFixedWidth(200)
     dialog.setWindowIcon(QtGui.QIcon('images/icon-windowed.ico'))
     app.setWindowIcon(QtGui.QIcon('images/icon-windowed.ico'))
 
