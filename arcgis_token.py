@@ -60,6 +60,7 @@ class ArcGIS(QtGui.QDialog):
 
         # Formatting
         layout.setAlignment(self.title_lbl, QtCore.Qt.AlignCenter)
+        layout.setAlignment(self.get_token_btn, QtCore.Qt.AlignCenter)
         layout.setAlignment(self.clipboard_chk, QtCore.Qt.AlignCenter)
         layout.setAlignment(self.message_lbl, QtCore.Qt.AlignCenter)
         layout.setAlignment(self.sub_message_lbl, QtCore.Qt.AlignCenter)
@@ -76,6 +77,8 @@ class ArcGIS(QtGui.QDialog):
         self.expiration_lbl.setFont(self.expiration_font)
         layout.setAlignment(self.expiration_lbl, QtCore.Qt.AlignCenter)
 
+        layout.setSizeConstraint(QtGui.QLayout.SetFixedSize)
+
         # Hide output widgets initially
         self.message_lbl.hide()
         self.sub_message_lbl.hide()
@@ -84,7 +87,7 @@ class ArcGIS(QtGui.QDialog):
 
         self.setLayout(layout)
         self.setWindowTitle(self.main_title)
-        self.setFocus()
+        self.setFocus()  # this is not working to remove focus from username widget
 
     def get_token(self):
 
@@ -132,6 +135,9 @@ class ArcGIS(QtGui.QDialog):
             self.expiration_lbl.show()
             self.token_output.show()
 
+    def resize_dialog(self, size):
+        self.resize(size)
+
     def clear_form(self):
 
         # Hide previous messages
@@ -144,6 +150,8 @@ class ArcGIS(QtGui.QDialog):
         self.password_txt.clear()
         self.expiration_combo.setCurrentIndex(0)
 
+        self.resize_dialog(self.minimumSizeHint())
+
 
 if __name__ == "__main__":
 
@@ -154,10 +162,8 @@ if __name__ == "__main__":
     ctypes.windll.shell32.SetCurrentProcessExplicitAppUserModelID(app_id)
 
     dialog = ArcGIS()
-    dialog.setFixedWidth(200)
     dialog.setWindowIcon(QtGui.QIcon('images/icon-windowed.ico'))
     app.setWindowIcon(QtGui.QIcon('images/icon-windowed.ico'))
-
     dialog.setWindowFlags(QtCore.Qt.WindowSystemMenuHint | QtCore.Qt.WindowTitleHint)
 
     dialog.show()
