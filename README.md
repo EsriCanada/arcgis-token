@@ -39,7 +39,9 @@ referer=http://www.arcgis.com
 ### Third Party Libraries Used
 
 - [PyQt4](http://www.riverbankcomputing.com/software/pyqt/download)
-- [pyinstaller](https://github.com/pyinstaller/pyinstaller/wiki)
+ - [Direct Download](http://sourceforge.net/projects/pyqt/files/PyQt4/PyQt-4.11.3/PyQt4-4.11.3-gpl-Py2.7-Qt4.8.6-x32.exe/download) for Windows 32 bit installer, Python 2.7
+- [Pyinstaller](https://github.com/pyinstaller/pyinstaller/wiki)
+- [Python for Windows](http://sourceforge.net/projects/pywin32/) (pywin32) as a dependency for Pyinstaller
 
 
 ### Build
