@@ -42,6 +42,7 @@ referer=http://www.arcgis.com
  - [Direct Download](http://sourceforge.net/projects/pyqt/files/PyQt4/PyQt-4.11.3/PyQt4-4.11.3-gpl-Py2.7-Qt4.8.6-x32.exe/download) for Windows 32 bit installer, Python 2.7
 - [Pyinstaller](https://github.com/pyinstaller/pyinstaller/wiki)
 - [Python for Windows](http://sourceforge.net/projects/pywin32/) (pywin32) as a dependency for Pyinstaller
+ - [Direct Download](http://sourceforge.net/projects/pywin32/files/pywin32/Build%20219/pywin32-219.win32-py2.7.exe/download) for pywin32, Python 2.7
 
 
 ### Build
